@@ -10,7 +10,7 @@ const send = document.getElementById('msgSendBtn');
 
 connection.onmessage = message => {
   const msg = JSON.parse(message.data);
-  console.log(msg.data.text);
+  console.log(msg);
 
   const template = document.querySelector('#chatWindow template');
   console.log(template);
@@ -25,7 +25,8 @@ connection.onmessage = message => {
 
   msgPos.appendChild(messageChat);
 };
-send.addEventListener('click', () => {
+
+const sendMessage = () => {
   const obj = {
     type: 'message',
 
@@ -35,4 +36,12 @@ send.addEventListener('click', () => {
   };
   const jsonObj = JSON.stringify(obj);
   connection.send(jsonObj);
+};
+send.addEventListener('click', sendMessage);
+
+document.addEventListener('keydown', event => {
+  console.log(event.key);
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
 });
