@@ -11,6 +11,8 @@
 }
 #msgInput{
   width: 95%;
+  border-radius: 5px;
+  border: 2px solid #e6e6e6;
 }
 body{
   background-color: #6699ff;
@@ -23,12 +25,15 @@ body{
   border: 5px solid #0066ff;
   margin: 0;
   border-radius: 12px;
+  padding: 2px 2px;
 }
 .titelDiv{
   text-align: center;
   height: 60px;
   line-height: 60px;
   background-color: #6699ff;
+  border-bottom: 3px solid #0066ff;
+  border-radius: 0px 0px 6px 6px;
 }
 #msgWindow{
   margin: 4px 0px 4px 20px;
@@ -41,6 +46,9 @@ body{
   border-radius: 8px;
   background-color: #0066ff;
   color: #FFFFFF;
+  border: none;
+  height: 23px;
+  width: 60px;
 }
 #msgSendBtn:focus{
   outline: none;

@@ -1,29 +1,51 @@
 /* eslint-disable no-unused-vars */
 import style from '../css/style.css';
 /* eslint-enable no-unused-vars */
-import password from './config.js';
+import password from './config';
 
 const connection = new WebSocket('ws://104.248.143.87:1337');
 
 const message = document.getElementById('msgInput');
 const send = document.getElementById('msgSendBtn');
-
-connection.onmessage = message => {
-  const msg = JSON.parse(message.data);
-  console.log(msg);
-
+function printMessage(msg) {
   const template = document.querySelector('#chatWindow template');
-  console.log(template);
   const tempateDiv = template.content.querySelector('#msgWindow');
-
   const messageChat = document.importNode(tempateDiv, true);
-  const chatWindow = document.getElementById('chatWindow');
   const msgPos = document.getElementById('msgPos');
-  console.log(chatWindow);
-  console.log(msgPos);
-  messageChat.textContent = msg.data.text;
-
+  const t = new Date(msg.time);
+  const time = t.toString().substr(16, 8);
+  messageChat.setAttribute('style', `background-color: ${msg.color}`);
+  messageChat.textContent = `${time} ${msg.author}: ${msg.text}`;
   msgPos.appendChild(messageChat);
+  msgPos.scrollTop = msgPos.scrollHeight;
+}
+
+function printErrorMessage(msg) {
+  const template = document.querySelector('#chatWindow template');
+  const tempateDiv = template.content.querySelector('#msgWindow');
+  const messageChat = document.importNode(tempateDiv, true);
+  const msgPos = document.getElementById('msgPos');
+  messageChat.setAttribute('style', `background-color: #ff0000`);
+  messageChat.textContent = `ERROR: ${msg}`;
+  msgPos.appendChild(messageChat);
+  msgPos.scrollTop = msgPos.scrollHeight;
+}
+
+connection.onmessage = dataMessage => {
+  const msg = JSON.parse(dataMessage.data);
+  console.log(msg);
+  if (msg.type === 'history') {
+    msg.data.forEach(messageHistory => {
+      console.log(messageHistory);
+      printMessage(messageHistory);
+    });
+  }
+  if (msg.type === 'message') {
+    printMessage(msg.data);
+  }
+  if (msg.data === 'Key is not valid') {
+    printErrorMessage(msg.data);
+  }
 };
 
 const sendMessage = () => {
@@ -40,7 +62,6 @@ const sendMessage = () => {
 send.addEventListener('click', sendMessage);
 
 document.addEventListener('keydown', event => {
-  console.log(event.key);
   if (event.key === 'Enter') {
     sendMessage();
   }
