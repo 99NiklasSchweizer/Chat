@@ -43,11 +43,13 @@ connection.onmessage = dataMessage => {
   if (msg.type === 'message') {
     printMessage(msg.data);
   }
-  if (msg.data === 'Key is not valid') {
+  if (msg.type === 'error') {
     printErrorMessage(msg.data);
   }
 };
-
+connection.onerror = error => {
+  printErrorMessage(`Èrror: ${error}`);
+};
 const sendMessage = () => {
   const obj = {
     type: 'message',

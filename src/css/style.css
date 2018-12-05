@@ -54,3 +54,7 @@ body{
   outline: none;
 
 }
+#msgInput:focus{
+  outline: none;
+
+}
